@@ -19,4 +19,4 @@
 
 ## Productive Coding
 
-* Use Ctrl+J to bring up the live templates
+* Use Ctrl+J to bring up the live templates 
