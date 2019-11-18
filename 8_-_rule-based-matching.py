@@ -61,3 +61,69 @@ for match_id, start, end in matches:
     # Get the matched span
     matched_span = doc[start:end]
     print(matched_span.text)
+
+# Here's an example of a more complex pattern using lexical attributes.
+# We're looking for five tokens:
+# A token consisting of only digits.
+# Three case-insensitive tokens for "fifa", "world" and "cup".
+# And a token that consists of punctuation.
+# The pattern matches the tokens "2018 FIFA World Cup:".
+
+pattern = [
+    {'IS_DIGIT': True},
+    {'LOWER': 'fifa'},
+    {'LOWER': 'world'},
+    {'LOWER': 'cup'},
+    {'IS_PUNCT': True}
+]
+
+doc = nlp("2018 FIFA World Cup: France won!")
+
+matcher.add('WORLDCUP_PATTERN', None, pattern)
+
+matches = matcher(doc)
+
+matches
+
+# We can also match other token attributes
+
+love_pattern = [
+    {'LEMMA': 'love', 'POS': 'VERB'},
+    {'POS': 'NOUN'}
+]
+
+catdogdoc = nlp("I loved dogs but now I love cats more.")
+
+matcher.add('LOVE_PATTERN', None, love_pattern)
+
+matches = matcher(catdogdoc)
+
+# We can use operators and quantifiers too
+
+# Operators and quantifiers let you define how often a token should be matched. They can be added using the "OP" key.
+# Here, the "?" operator makes the determiner token optional, so it will match a token with the lemma "buy",
+# an optional article and a noun.
+
+# "OP" can have one of four values:
+#
+# An "!" negates the token, so it's matched 0 times.
+#
+# A "?" makes the token optional, and matches it 0 or 1 times.
+#
+# A "+" matches a token 1 or more times.
+#
+# And finally, an "*" matches 0 or more times.
+#
+# Operators can make your patterns a lot more powerful, but they also add more complexity – so use them wisely.
+
+buy_pattern = [
+    {'LEMMA': 'buy'},
+    {'POS': 'DET', 'OP': '?'},  # optional: match 0 or 1 times
+    {'POS': 'NOUN'}
+]
+
+phone_doc = nlp("I bought a smartphone. Now I'm buying apps.")
+
+matcher.add('BUY_PATTERN', None, buy_pattern)
+
+matches = matcher(phone_doc)
