@@ -51,7 +51,10 @@ matches = matcher(doc)
 doc = nlp("New iPhone X release date leaked")
 matches = matcher(doc)
 
-print(matches)
+
+# When you call the matcher on a doc, it returns a list of tuples.
+# Each tuple consists of three values: the match ID, the start index and the end index of the matched span.
+# This means we can iterate over the matches and create a Span object: a slice of the doc at the start and end index.
 
 # Iterate over the matches
 for match_id, start, end in matches:
